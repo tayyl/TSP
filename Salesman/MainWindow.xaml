@@ -1,0 +1,225 @@
+﻿<Window x:Class="Salesman.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Salesman"
+        mc:Ignorable="d"
+        xmlns:vm="clr-namespace:Salesman.ViewModel"
+        Title="MainWindow" Height="800" Width="1000">
+    <Window.DataContext>
+        <vm:SalesmanVM />
+    </Window.DataContext>
+    <Window.Resources>
+        <vm:BoolToVisibilityConverter x:Key="BoolToVisibility" />
+    </Window.Resources>
+    <StackPanel>
+        <Menu>
+            <MenuItem Header="_File">
+                <MenuItem Header="_Open" >
+
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+        <Grid>
+            <Label Content="Cities Amount:"/>
+            <TextBox Text="{Binding CitiesAmount}" Height="20" Margin="140,4,747,2"/>
+        </Grid>
+        <StackPanel
+            Orientation="Horizontal" Height="50">
+
+            <Button
+                Width="110"
+                Height="30"
+                Command="{Binding DrawGraph}"
+                Content="Draw Graph"
+                Margin="10"/>
+
+            <Button
+                Width="110"
+                Height="30"
+                Command="{Binding RunCommand}"
+                Content="Run"
+                Margin="10"/>
+            <Grid VerticalAlignment="Center" Width="200" Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="25" />
+                </Grid.RowDefinitions>
+
+                <Label 
+                    VerticalContentAlignment="Center"
+                    Content="{Binding BestDistance}"
+                    VerticalAlignment="Center" Padding="0" Height="15" Margin="0,10,0,5"/>
+
+                <Label
+                    VerticalContentAlignment="Center"
+                    Content="{Binding Iteration}"  
+                    Grid.Row="1" />
+            </Grid>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25" />
+                    <RowDefinition Height="25" />
+                </Grid.RowDefinitions>
+                <CheckBox Width="16" Height="16" Margin="0,3,106,6" Name="orgGE" IsChecked="True"/>
+                <Label Content="Original Graph Edges" Margin="21,-4,-21,0"   />
+                <CheckBox Width="16" Height="16" Margin="6,3,112,6" Name="orgGW" Grid.Row="1" IsChecked="True"/>
+                <Label Content="Original Graph Weights" Margin="21,-4,-21,0" Grid.Row="1"/>
+            </Grid>
+            <Grid Margin="15,0,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25" />
+                    <RowDefinition Height="25" />
+                </Grid.RowDefinitions>
+                <CheckBox Width="16" Height="16" Grid.Row="1" Margin="0,4,106,5" Name="finalGW" IsChecked="True"/>
+                <Label Content="Final Graph Weigths"  Margin="21,21,-22,0" Grid.RowSpan="2" />
+                <CheckBox Width="16" Height="16" Margin="6,3,112,6" Name="finalGE" IsChecked="True"/>
+                <Label Content="Final Graph Edges" Margin="21,-4,-21,0" />
+            </Grid>
+            <Grid Margin="15,0,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25" />
+                    <RowDefinition Height="25" />
+                </Grid.RowDefinitions>
+                <CheckBox Width="16" Height="16"  Name="cce" Margin="0,4,124,5" IsChecked="True"/>
+                <Label Content="Currently checked edges" Margin="16,-2,-16,0" />
+            </Grid>
+        </StackPanel>
+        <Canvas Width="{Binding AreaWidth}" Height="{Binding AreaHeight}" Background="#FFE8E8E8" >
+            <!--Original graph edges-->
+            <ItemsControl ItemsSource="{Binding Edges, Mode=TwoWay}" Visibility="{Binding IsChecked, ElementName=orgGE, Converter={StaticResource BoolToVisibility }}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Line X1="{Binding X1}" X2="{Binding X2}" Y1="{Binding Y1}" Y2="{Binding Y2}" StrokeThickness="1" Stroke="Coral">
+
+                        </Line>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <!--Currently visitied graph edges-->
+            <ItemsControl ItemsSource="{Binding CurrentEdges, Mode=TwoWay}" Visibility="{Binding IsChecked, ElementName=cce, Converter={StaticResource BoolToVisibility }}" >
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Line X1="{Binding X1}" X2="{Binding X2}" Y1="{Binding Y1}" Y2="{Binding Y2}" StrokeThickness="1" Stroke="Red">
+
+                        </Line>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <!--Final path graph edges-->
+            <ItemsControl ItemsSource="{Binding FinalEdges, Mode=TwoWay}" Visibility="{Binding IsChecked, ElementName=finalGE, Converter={StaticResource BoolToVisibility }}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Line X1="{Binding X1}" X2="{Binding X2}" Y1="{Binding Y1}" Y2="{Binding Y2}" StrokeThickness="1" Stroke="Green">
+
+                        </Line>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <!--Original graph vertexes-->
+            <ItemsControl ItemsSource="{Binding Cities, Mode=TwoWay}" >
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+
+                        <Ellipse Width="20" Height="20" Fill="Brown" >
+                            <Ellipse.RenderTransform>
+                                <TranslateTransform X="{Binding Xview}" Y="{Binding Yview}"/>
+                            </Ellipse.RenderTransform>
+                        </Ellipse>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+
+            <!--Visited graph vertexes-->
+            <ItemsControl ItemsSource="{Binding VisitedCities, Mode=TwoWay}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Ellipse Width="20" Height="20" Fill="Green" >
+                            <Ellipse.RenderTransform>
+                                <TranslateTransform X="{Binding Xview}" Y="{Binding Yview}"/>
+                            </Ellipse.RenderTransform>
+                        </Ellipse>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <!--Original graph cities numbers-->
+            <ItemsControl ItemsSource="{Binding Cities, Mode=TwoWay}"  Visibility="{Binding IsChecked, ElementName=orgGV, Converter={StaticResource BoolToVisibility }}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Width="20" Height="20" Text="{Binding Number}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="7,0,0,0" >
+                            <TextBlock.RenderTransform>
+                                <TranslateTransform X="{Binding Xview}" Y="{Binding Yview}"/>
+                            </TextBlock.RenderTransform>
+                        </TextBlock>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <!--Graph edges weights-->
+            <ItemsControl ItemsSource="{Binding Edges, Mode=TwoWay}" Visibility="{Binding IsChecked, ElementName=orgGW, Converter={StaticResource BoolToVisibility }}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Width="15" Height="18" Text="{Binding Weight}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF074D00" Background="#FFCFCFCF" >
+                            <TextBlock.RenderTransform>
+                                <TranslateTransform X="{Binding CenterX}" Y="{Binding CenterY}"/>
+                            </TextBlock.RenderTransform>
+                        </TextBlock>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <!--Graph final edges weights-->
+            <ItemsControl ItemsSource="{Binding FinalEdges, Mode=TwoWay}" Visibility="{Binding IsChecked, ElementName=finalGW, Converter={StaticResource BoolToVisibility }}" >
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Width="15" Height="18" Text="{Binding Weight}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FF030603" Background="#FFFFED99" >
+                            <TextBlock.RenderTransform>
+                                <TranslateTransform X="{Binding CenterX}" Y="{Binding CenterY}"/>
+                            </TextBlock.RenderTransform>
+                        </TextBlock>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Canvas>
+    </StackPanel>
+</Window>

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Interop;
 using Salesman.Model;
@@ -56,6 +57,9 @@ namespace Salesman.ViewModel
                 return runCommand;
             }
         }
+        private object _lockCurrentEdges = new object();
+        private object _lockFinalEdges = new object();
+        private object _lockVisitedCities= new object();
         public SalesmanVM()
         {
             model = new SalesmanM(AreaWidth-30, AreaHeight-30, 0);
@@ -64,6 +68,9 @@ namespace Salesman.ViewModel
             VisitedCities = new ObservableCollection<City>();
             CurrentEdges = new ObservableCollection<Edge>();
             FinalEdges = new ObservableCollection<Edge>();
+            BindingOperations.EnableCollectionSynchronization(CurrentEdges, _lockCurrentEdges);
+            BindingOperations.EnableCollectionSynchronization(FinalEdges, _lockFinalEdges);
+            BindingOperations.EnableCollectionSynchronization(VisitedCities, _lockVisitedCities);
             drawGraph = new RelayCommand()
             {
                 CanExecuteDelegate = x => true,
@@ -96,8 +103,10 @@ namespace Salesman.ViewModel
                     OnPropertyChanged(nameof(CurrentEdges));
 
                     model.ChoseAlgorithm(AlgorithmType.NearestNeighbour);
-                    BestDistance=model.Algorithm.TSP(VisitedCities, CurrentEdges, FinalEdges).ToString();
+                    Task.Factory.StartNew(() => { BestDistance = model.Algorithm.TSP(VisitedCities, CurrentEdges, FinalEdges).ToString(); });
+                      
 
+                   
                 }
             };
         }

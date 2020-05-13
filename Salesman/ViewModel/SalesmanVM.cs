@@ -12,6 +12,13 @@ using System.Windows.Interop;
 using Salesman.Model;
 namespace Salesman.ViewModel
 {
+    public class AlgorithmCB
+    {
+        private AlgorithmType id;
+        public AlgorithmType Id { get { return id; } set { id = value; } }
+        private string name;
+        public string Name { get { return name; } set { name = value; } }
+    }
     public class SalesmanVM : INotifyPropertyChanged
     {
         private int citiesAmount;
@@ -37,6 +44,8 @@ namespace Salesman.ViewModel
                 OnPropertyChanged(nameof(CitiesAmount));
             }
         }
+        public AlgorithmCB AlgorithmCBPicked { get; set; }
+        public ObservableCollection<AlgorithmCB> AlgorithmCBs { get; set; }
         public ObservableCollection<City> Cities { get; set; }
         public ObservableCollection<City> VisitedCities { get; set; }
         public ObservableCollection<Edge> Edges { get; set; }
@@ -66,6 +75,24 @@ namespace Salesman.ViewModel
         public SalesmanVM()
         {
             model = new SalesmanM(AreaWidth-30, AreaHeight-30, 0);
+            AlgorithmCBs = new ObservableCollection<AlgorithmCB>()
+            {
+                new AlgorithmCB()
+                {
+                    Id=AlgorithmType.Astar,
+                    Name="A*"
+                },
+                new AlgorithmCB()
+                {
+                    Id=AlgorithmType.NearestNeighbour,
+                    Name="Nearest Neighbour"
+                },
+                new AlgorithmCB()
+                {
+                    Id=AlgorithmType.SimulatedAnnealing,
+                    Name="Simulated Annealing"
+                }
+            };
             Cities = new ObservableCollection<City>();
             Edges = new ObservableCollection<Edge>();
             VisitedCities = new ObservableCollection<City>();
@@ -111,7 +138,7 @@ namespace Salesman.ViewModel
                     OnPropertyChanged(nameof(CurrentEdges));
                     OnPropertyChanged(nameof(CurrentBestEdge));
 
-                    model.ChoseAlgorithm(AlgorithmType.NearestNeighbour, Delay);
+                    model.ChoseAlgorithm(AlgorithmCBPicked.Id, Delay);
                     Task.Factory.StartNew(() => { BestDistance = model.Algorithm.TSP(VisitedCities, CurrentEdges, CurrentBestEdge,FinalEdges).ToString(); });
                     
 

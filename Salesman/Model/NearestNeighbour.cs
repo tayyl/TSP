@@ -76,6 +76,7 @@ namespace Salesman.Model
             System.Threading.Thread.Sleep(200);
             App.Current.Dispatcher.BeginInvoke((Action)delegate
             {
+                CurrentBestEdge.Clear();
                 FinalEdges.Add(new Edge(VisitedCities.Last().X, VisitedCities.Last().Y, VisitedCities.First().X, VisitedCities.First().Y, neighbourMatrix[VisitedCities.Last().Number, VisitedCities.First().Number]));
 
             });

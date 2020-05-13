@@ -26,7 +26,7 @@
             <TextBox Text="{Binding CitiesAmount}" Height="20" Margin="140,4,743,2"/>
             <Label Content="Delay between steps:" Margin="269,0,593,0"/>
             <TextBox Text="{Binding Delay}" Height="20" Margin="404,4,514,2"/>
-            <ComboBox Margin="487,4,373,2" Height="20"/>
+            <ComboBox Margin="487,4,358,2" Height="20" ItemsSource="{Binding AlgorithmCBs}" SelectedItem="{Binding AlgorithmCBPicked}" DisplayMemberPath="Name"  SelectedIndex="1"/>
         </Grid>
         <StackPanel
             Orientation="Horizontal" Height="50">

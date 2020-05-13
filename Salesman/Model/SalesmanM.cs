@@ -25,12 +25,12 @@ namespace Salesman.Model
             Cities = new List<City>();
             Edges = new List<Edge>();
         }
-        public void ChoseAlgorithm(AlgorithmType algorithmType)
+        public void ChoseAlgorithm(AlgorithmType algorithmType,int delay)
         {
             switch (algorithmType)
             {
                 case AlgorithmType.Astar: Algorithm = new Astar(); break;
-                case AlgorithmType.NearestNeighbour: Algorithm = new NearestNeighbour(NeighbourMatrix, Cities, Edges); break;
+                case AlgorithmType.NearestNeighbour: Algorithm = new NearestNeighbour(NeighbourMatrix, Cities, Edges,delay); break;
                 case AlgorithmType.SimulatedAnnealing: Algorithm = new Annealing(); break;
             }
         }

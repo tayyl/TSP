@@ -14,7 +14,7 @@ namespace Salesman.Model
         protected List<City> cities;
         protected List<Edge> edges;
         protected int[,] neighbourMatrix;
-        public abstract int TSP(ObservableCollection<City> VisitedCities, ObservableCollection<Edge> CurrentEdges, ObservableCollection<Edge> FinalEdges);
+        public abstract int TSP(ObservableCollection<City> VisitedCities, ObservableCollection<Edge> CurrentEdges, ObservableCollection<Edge> CurrentBestEdge, ObservableCollection<Edge> FinalEdges);
       
     }
 }

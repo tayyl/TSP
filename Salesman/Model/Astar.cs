@@ -9,7 +9,7 @@ namespace Salesman.Model
 {
     public class Astar : Algorithm
     {
-        public override int TSP(ObservableCollection<City> VisitedCities, ObservableCollection<Edge> CurrentEdges, ObservableCollection<Edge> FinalEdges)
+        public override int TSP(ObservableCollection<City> VisitedCities, ObservableCollection<Edge> CurrentEdges, ObservableCollection<Edge> CurrentBestEdge, ObservableCollection<Edge> FinalEdges)
         {
             throw new NotImplementedException();
         }

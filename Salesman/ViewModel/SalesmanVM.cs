@@ -19,6 +19,7 @@ namespace Salesman.ViewModel
         SalesmanM model;
         public int AreaWidth { get; set; } = 900;
         public int AreaHeight { get; set; } = 650;
+        public int Delay { get; set; } = 200;
         public string BestDistance
         {
             get { return "Best Distance: " + bestDistance; }
@@ -40,6 +41,7 @@ namespace Salesman.ViewModel
         public ObservableCollection<City> VisitedCities { get; set; }
         public ObservableCollection<Edge> Edges { get; set; }
         public ObservableCollection<Edge> CurrentEdges { get; set; }
+        public ObservableCollection<Edge> CurrentBestEdge { get; set; }
         public ObservableCollection<Edge> FinalEdges { get; set; }
         ICommand drawGraph;
         public ICommand DrawGraph
@@ -58,6 +60,7 @@ namespace Salesman.ViewModel
             }
         }
         private object _lockCurrentEdges = new object();
+        private object _lockCurrentBestEdges = new object();
         private object _lockFinalEdges = new object();
         private object _lockVisitedCities= new object();
         public SalesmanVM()
@@ -67,10 +70,12 @@ namespace Salesman.ViewModel
             Edges = new ObservableCollection<Edge>();
             VisitedCities = new ObservableCollection<City>();
             CurrentEdges = new ObservableCollection<Edge>();
+            CurrentBestEdge = new ObservableCollection<Edge>();
             FinalEdges = new ObservableCollection<Edge>();
             BindingOperations.EnableCollectionSynchronization(CurrentEdges, _lockCurrentEdges);
             BindingOperations.EnableCollectionSynchronization(FinalEdges, _lockFinalEdges);
             BindingOperations.EnableCollectionSynchronization(VisitedCities, _lockVisitedCities);
+            BindingOperations.EnableCollectionSynchronization(CurrentBestEdge, _lockCurrentBestEdges);
             drawGraph = new RelayCommand()
             {
                 CanExecuteDelegate = x => true,
@@ -79,6 +84,7 @@ namespace Salesman.ViewModel
                     VisitedCities.Clear();
                     FinalEdges.Clear();
                     CurrentEdges.Clear();
+                    CurrentBestEdge.Clear();
                     model.GenerateRandomCities(CitiesAmount);
                     model.GenerateRandomDistances();
                     Cities = new ObservableCollection<City>(model.Cities);
@@ -88,6 +94,7 @@ namespace Salesman.ViewModel
                     OnPropertyChanged(nameof(VisitedCities));
                     OnPropertyChanged(nameof(FinalEdges));
                     OnPropertyChanged(nameof(CurrentEdges));
+                    OnPropertyChanged(nameof(CurrentBestEdge));
                 }
             };
             runCommand = new RelayCommand()
@@ -98,13 +105,15 @@ namespace Salesman.ViewModel
                     VisitedCities.Clear();
                     FinalEdges.Clear();
                     CurrentEdges.Clear();
+                    CurrentBestEdge.Clear();
                     OnPropertyChanged(nameof(VisitedCities));
                     OnPropertyChanged(nameof(FinalEdges));
                     OnPropertyChanged(nameof(CurrentEdges));
+                    OnPropertyChanged(nameof(CurrentBestEdge));
 
-                    model.ChoseAlgorithm(AlgorithmType.NearestNeighbour);
-                    Task.Factory.StartNew(() => { BestDistance = model.Algorithm.TSP(VisitedCities, CurrentEdges, FinalEdges).ToString(); });
-                      
+                    model.ChoseAlgorithm(AlgorithmType.NearestNeighbour, Delay);
+                    Task.Factory.StartNew(() => { BestDistance = model.Algorithm.TSP(VisitedCities, CurrentEdges, CurrentBestEdge,FinalEdges).ToString(); });
+                    
 
                    
                 }

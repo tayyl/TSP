@@ -24,6 +24,7 @@ namespace Salesman.ViewModel
         private int citiesAmount;
         private string bestDistance;
         SalesmanM model;
+        #region Attributes
         public int AreaWidth { get; set; } = 900;
         public int AreaHeight { get; set; } = 650;
         public int Delay { get; set; } = 200;
@@ -44,6 +45,8 @@ namespace Salesman.ViewModel
                 OnPropertyChanged(nameof(CitiesAmount));
             }
         }
+        #endregion
+        #region ObservableCollections for printing graph
         public AlgorithmCB AlgorithmCBPicked { get; set; }
         public ObservableCollection<AlgorithmCB> AlgorithmCBs { get; set; }
         public ObservableCollection<City> Cities { get; set; }
@@ -52,6 +55,8 @@ namespace Salesman.ViewModel
         public ObservableCollection<Edge> CurrentEdges { get; set; }
         public ObservableCollection<Edge> CurrentBestEdge { get; set; }
         public ObservableCollection<Edge> FinalEdges { get; set; }
+        #endregion
+        #region Commands
         ICommand drawGraph;
         public ICommand DrawGraph
         {
@@ -68,10 +73,13 @@ namespace Salesman.ViewModel
                 return runCommand;
             }
         }
+        #endregion
+        #region Locks for async updates of ObservableCollections
         private object _lockCurrentEdges = new object();
         private object _lockCurrentBestEdges = new object();
         private object _lockFinalEdges = new object();
         private object _lockVisitedCities= new object();
+        #endregion
         public SalesmanVM()
         {
             model = new SalesmanM(AreaWidth-30, AreaHeight-30, 0);
@@ -140,9 +148,7 @@ namespace Salesman.ViewModel
 
                     model.ChoseAlgorithm(AlgorithmCBPicked.Id, Delay);
                     Task.Factory.StartNew(() => { BestDistance = model.Algorithm.TSP(VisitedCities, CurrentEdges, CurrentBestEdge,FinalEdges).ToString(); });
-                    
-
-                   
+      
                 }
             };
         }

@@ -10,14 +10,11 @@ namespace Salesman.Model
 {
     public class NearestNeighbour : Algorithm
     {
-        int delay;
-        public NearestNeighbour(int[,] matrix, List<City> cities, List<Edge> edges, int delay=200)
+        public NearestNeighbour(int[,] matrix, List<City> cities, int delay = 200)
+            : base(matrix, cities, delay)
         {
-            neighbourMatrix = (int[,])matrix.Clone();
-            this.cities = new List<City>(cities);
-            this.edges = new List<Edge>(edges);
-            this.delay = delay;
         }
+
         //Every Thread Sleep is for having good animation of every step in normal algorithm it obviously can be avoided
         //every Current.Dispatcher.BeginInvoke is for asynchronously update Lists, it's here also for the purpose of good visual representation
         public override int TSP(ObservableCollection<City> VisitedCities, ObservableCollection<Edge> CurrentEdges, ObservableCollection<Edge> CurrentBestEdge, ObservableCollection<Edge> FinalEdges)

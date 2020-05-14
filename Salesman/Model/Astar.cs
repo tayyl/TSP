@@ -9,6 +9,10 @@ namespace Salesman.Model
 {
     public class Astar : Algorithm
     {
+        public Astar(int[,] matrix, List<City> cities, int delay = 200) : base(matrix, cities, delay)
+        {
+        }
+
         public override int TSP(ObservableCollection<City> VisitedCities, ObservableCollection<Edge> CurrentEdges, ObservableCollection<Edge> CurrentBestEdge, ObservableCollection<Edge> FinalEdges)
         {
             throw new NotImplementedException();

@@ -29,9 +29,9 @@ namespace Salesman.Model
         {
             switch (algorithmType)
             {
-                case AlgorithmType.Astar: Algorithm = new Astar(); break;
-                case AlgorithmType.NearestNeighbour: Algorithm = new NearestNeighbour(NeighbourMatrix, Cities, Edges,delay); break;
-                case AlgorithmType.SimulatedAnnealing: Algorithm = new Annealing(); break;
+                case AlgorithmType.Astar: Algorithm = new Astar(NeighbourMatrix, Cities, delay); break;
+                case AlgorithmType.NearestNeighbour: Algorithm = new NearestNeighbour(NeighbourMatrix, Cities, delay);  break;
+                case AlgorithmType.SimulatedAnnealing: Algorithm = new Annealing(NeighbourMatrix, Cities, delay); break;
             }
         }
         public City GetRandomCity(int number)

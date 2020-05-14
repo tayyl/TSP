@@ -10,10 +10,17 @@ namespace Salesman.Model
 {
     public abstract class Algorithm
     {
-        public bool Empty { get => cities.Any();}
+        public bool Empty { get => cities.Any(); }
+        protected int delay;
         protected List<City> cities;
-        protected List<Edge> edges;
         protected int[,] neighbourMatrix;
+
+        public Algorithm(int[,] matrix, List<City> cities, int delay = 200)
+        {
+            neighbourMatrix = (int[,])matrix.Clone();
+            this.cities = new List<City>(cities);
+            this.delay = delay;
+        }
         public abstract int TSP(ObservableCollection<City> VisitedCities, ObservableCollection<Edge> CurrentEdges, ObservableCollection<Edge> CurrentBestEdge, ObservableCollection<Edge> FinalEdges);
       
     }

@@ -47,7 +47,7 @@ namespace Salesman.Model
                 }
                 else
                 {
-                    proba = rnd.Next();
+                    proba = rnd.NextDouble();
                     //if the new distance is worse accept 
                     //it but with a probability level
                     //if the probability is less than 

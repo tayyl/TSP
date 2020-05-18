@@ -15,7 +15,14 @@ namespace Salesman.Model
 
         public override int TSP(ObservableCollection<City> VisitedCities, ObservableCollection<Edge> CurrentEdges, ObservableCollection<Edge> CurrentBestEdge, ObservableCollection<Edge> CurrentFinalEdges, ObservableCollection<Edge> FinalEdges)
         {
-            throw new NotImplementedException();
+            int bestDistance = 0;
+            City startingCity = cities.First();
+            cities.RemoveAt(0);
+            City finalCity = cities.First();
+            cities.RemoveAt(0);
+
+
+            return bestDistance;
         }
     }
 }

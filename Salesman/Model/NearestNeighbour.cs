@@ -100,6 +100,7 @@ namespace Salesman.Model
                 {
                     CurrentFinalEdges.Clear();
                 });
+                currentBestDistance = 0;
                 System.Threading.Thread.Sleep(delay);
             }
             return bestDistance;

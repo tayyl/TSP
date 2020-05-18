@@ -82,8 +82,9 @@ namespace Salesman.Model
                     CurrentBestEdge.Clear();
                     CurrentFinalEdges.Add(new Edge(VisitedCities.Last().X, VisitedCities.Last().Y, VisitedCities.First().X, VisitedCities.First().Y, neighbourMatrix[VisitedCities.Last().Number, VisitedCities.First().Number]));
 
+                    currentBestDistance += neighbourMatrix[VisitedCities.Last().Number, VisitedCities.First().Number];
                 });
-                System.Threading.Thread.Sleep(delay);
+                System.Threading.Thread.Sleep(delay*3);
                 if (currentBestDistance < bestDistance)
                 {
                     bestDistance = currentBestDistance;

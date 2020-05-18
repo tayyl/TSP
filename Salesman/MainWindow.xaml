@@ -135,6 +135,21 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+            <!--Current Final path graph edges-->
+            <ItemsControl ItemsSource="{Binding CurrentFinalEdges, Mode=TwoWay}" Visibility="{Binding IsChecked, ElementName=cce, Converter={StaticResource BoolToVisibility }}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Line X1="{Binding X1}" X2="{Binding X2}" Y1="{Binding Y1}" Y2="{Binding Y2}" StrokeThickness="1" Stroke="#FF46194D">
+
+                        </Line>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
             <!--Final path graph edges-->
             <ItemsControl ItemsSource="{Binding FinalEdges, Mode=TwoWay}" Visibility="{Binding IsChecked, ElementName=finalGE, Converter={StaticResource BoolToVisibility }}">
                 <ItemsControl.ItemsPanel>

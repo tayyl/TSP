@@ -55,6 +55,7 @@ namespace Salesman.ViewModel
         public ObservableCollection<Edge> CurrentEdges { get; set; }
         public ObservableCollection<Edge> CurrentBestEdge { get; set; }
         public ObservableCollection<Edge> FinalEdges { get; set; }
+        public ObservableCollection<Edge> CurrentFinalEdges { get; set; }
         #endregion
         #region Commands
         ICommand drawGraph;
@@ -78,6 +79,7 @@ namespace Salesman.ViewModel
         private object _lockCurrentEdges = new object();
         private object _lockCurrentBestEdges = new object();
         private object _lockFinalEdges = new object();
+        private object _lockCurrentFinalEdges = new object();
         private object _lockVisitedCities= new object();
         #endregion
         public SalesmanVM()
@@ -107,8 +109,10 @@ namespace Salesman.ViewModel
             CurrentEdges = new ObservableCollection<Edge>();
             CurrentBestEdge = new ObservableCollection<Edge>();
             FinalEdges = new ObservableCollection<Edge>();
+            CurrentFinalEdges = new ObservableCollection<Edge>();
             BindingOperations.EnableCollectionSynchronization(CurrentEdges, _lockCurrentEdges);
             BindingOperations.EnableCollectionSynchronization(FinalEdges, _lockFinalEdges);
+            BindingOperations.EnableCollectionSynchronization(CurrentFinalEdges, _lockCurrentFinalEdges);
             BindingOperations.EnableCollectionSynchronization(VisitedCities, _lockVisitedCities);
             BindingOperations.EnableCollectionSynchronization(CurrentBestEdge, _lockCurrentBestEdges);
             drawGraph = new RelayCommand()
@@ -147,7 +151,7 @@ namespace Salesman.ViewModel
                     OnPropertyChanged(nameof(CurrentBestEdge));
 
                     model.ChoseAlgorithm(AlgorithmCBPicked.Id, Delay);
-                    Task.Factory.StartNew(() => { BestDistance = model.Algorithm.TSP(VisitedCities, CurrentEdges, CurrentBestEdge,FinalEdges).ToString(); });
+                    Task.Factory.StartNew(() => { BestDistance = model.Algorithm.TSP(VisitedCities, CurrentEdges, CurrentBestEdge,CurrentFinalEdges,FinalEdges).ToString(); });
       
                 }
             };

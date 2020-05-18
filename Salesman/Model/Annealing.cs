@@ -19,7 +19,7 @@ namespace Salesman.Model
         {
             rnd = random;
         }
-        public override int TSP(ObservableCollection<City> VisitedCities, ObservableCollection<Edge> CurrentEdges, ObservableCollection<Edge> CurrentBestEdges, ObservableCollection<Edge> FinalEdges)
+        public override int TSP(ObservableCollection<City> VisitedCities, ObservableCollection<Edge> CurrentEdges, ObservableCollection<Edge> CurrentBestEdges, ObservableCollection<Edge> CurrentFinalEdges, ObservableCollection<Edge> FinalEdges)
         {
             int iteration = -1;
             //the probability
@@ -34,11 +34,8 @@ namespace Salesman.Model
             {
                 iteration++;
 
-                //get the next random permutation of distances 
                 Permutation(cities, out nextCities);
-                //compute the distance of the new permuted configuration
                 delta = ComputeDistance(nextCities) - distance;
-                //if the new distance is better accept it and assign it
                 if (delta < 0)
                 {
                     cities = new List<City>(nextCities);
@@ -48,20 +45,13 @@ namespace Salesman.Model
                 else
                 {
                     proba = rnd.NextDouble();
-                    //if the new distance is worse accept 
-                    //it but with a probability level
-                    //if the probability is less than 
-                    //E to the power -delta/temperature.
-                    //otherwise the old value is kept
                     if (proba < Math.Exp(-delta / temperature))
                     {
                         cities = new List<City>(nextCities);
                         distance = delta + distance;
                     }
                 }
-                //cooling process on every iteration
                 temperature *= alpha;
-                //print every 400 iterations
                 if (iteration % 100 == 0)
                 {
                     System.Threading.Thread.Sleep(delay);

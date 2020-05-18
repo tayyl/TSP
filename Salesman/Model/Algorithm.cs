@@ -21,7 +21,7 @@ namespace Salesman.Model
             this.cities = new List<City>(cities);
             this.delay = delay;
         }
-        public abstract int TSP(ObservableCollection<City> VisitedCities, ObservableCollection<Edge> CurrentEdges, ObservableCollection<Edge> CurrentBestEdge, ObservableCollection<Edge> FinalEdges);
+        public abstract int TSP(ObservableCollection<City> VisitedCities, ObservableCollection<Edge> CurrentEdges, ObservableCollection<Edge> CurrentBestEdge, ObservableCollection<Edge> CurrentFinalEdges, ObservableCollection<Edge> FinalEdges);
       
     }
 }

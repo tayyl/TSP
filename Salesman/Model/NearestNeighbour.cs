@@ -17,7 +17,7 @@ namespace Salesman.Model
 
         //Every Thread Sleep is for having good animation of every step in normal algorithm it obviously can be avoided
         //every Current.Dispatcher.BeginInvoke is for asynchronously update Lists, it's here also for the purpose of good visual representation
-        public override int TSP(ObservableCollection<City> VisitedCities, ObservableCollection<Edge> CurrentEdges, ObservableCollection<Edge> CurrentBestEdge, ObservableCollection<Edge> CurrentFinalEdges, ObservableCollection<Edge> FinalEdges)
+        public Tuple<int,string> TSP(ICollection<City> VisitedCities, ICollection<Edge> CurrentEdges, ICollection<Edge> CurrentBestEdge, ICollection<Edge> CurrentFinalEdges, ICollection<Edge> FinalEdges)
         {
             int bestDistance = 100000000, currentBestDistance = 0;
             List<City> allCities = new List<City>(cities);
@@ -96,6 +96,7 @@ namespace Salesman.Model
                             FinalEdges.Add(edge);
                     });
                 }
+                System.Threading.Thread.Sleep(delay);
                 App.Current.Dispatcher.BeginInvoke((Action)delegate
                 {
                     CurrentFinalEdges.Clear();
@@ -103,7 +104,7 @@ namespace Salesman.Model
                 currentBestDistance = 0;
                 System.Threading.Thread.Sleep(delay);
             }
-            return bestDistance;
+            return new Tuple<int, string>(bestDistance, CreatePath(FinalEdges));
         }
     }
 }

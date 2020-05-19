@@ -24,10 +24,23 @@ namespace Salesman.ViewModel
         private int citiesAmount;
         private string bestDistance;
         SalesmanM model;
+        private string path;
         #region Attributes
         public int AreaWidth { get; set; } = 900;
         public int AreaHeight { get; set; } = 650;
-        public int Delay { get; set; } = 200;
+        public int Delay { get; set; } = 50;
+        public string Path
+        {
+            get
+            {
+                return path;
+            }
+            set
+            {
+                path = value;
+                OnPropertyChanged("Path");
+            }
+        }
         public string BestDistance
         {
             get { return "Best Distance: " + bestDistance; }
@@ -150,8 +163,10 @@ namespace Salesman.ViewModel
                     OnPropertyChanged(nameof(CurrentEdges));
                     OnPropertyChanged(nameof(CurrentBestEdge));
 
-                    model.ChoseAlgorithm(AlgorithmCBPicked.Id, Delay);
-                    Task.Factory.StartNew(() => { BestDistance = model.Algorithm.TSP(VisitedCities, CurrentEdges, CurrentBestEdge,CurrentFinalEdges,FinalEdges).ToString(); });
+                    Task.Factory.StartNew(() => { Tuple<int,string> result= model.TSP(AlgorithmCBPicked.Id,Delay,VisitedCities, CurrentEdges, CurrentBestEdge, CurrentFinalEdges, FinalEdges);
+                        Path = result.Item2;
+                        BestDistance = result.Item1.ToString();
+                    });
       
                 }
             };

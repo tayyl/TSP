@@ -19,7 +19,7 @@ namespace Salesman.Model
         {
             rnd = random;
         }
-        public override int TSP(ObservableCollection<City> VisitedCities, ObservableCollection<Edge> CurrentEdges, ObservableCollection<Edge> CurrentBestEdges, ObservableCollection<Edge> CurrentFinalEdges, ObservableCollection<Edge> FinalEdges)
+        public Tuple<int,string> TSP(ICollection<City> VisitedCities, ICollection<Edge> CurrentBestEdges, ICollection<Edge> FinalEdges)
         {
             int iteration = -1;
             //the probability
@@ -67,14 +67,15 @@ namespace Salesman.Model
             }
             App.Current.Dispatcher.BeginInvoke((Action)delegate
             {
-                foreach (Edge edge in CurrentBestEdges)
-                    FinalEdges.Add(edge);
+                for(int i=0; i<cities.Count-1; i++)
+                    FinalEdges.Add(new Edge(cities[i],cities[i+1],neighbourMatrix[cities[i].Number,cities[i+1].Number]));
+                FinalEdges.Add(new Edge(cities.Last(),cities.First(),neighbourMatrix[cities.First().Number,cities.Last().Number]));
                 CurrentBestEdges.Clear();
                 foreach (City city in cities)
                     VisitedCities.Add(city);
             });
-        
-            return distance;
+            System.Threading.Thread.Sleep(delay);
+            return new Tuple<int, string>(distance, CreatePath(FinalEdges));
         }
         int ComputeDistance(List<City> cities)
         {

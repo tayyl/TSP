@@ -21,7 +21,16 @@ namespace Salesman.Model
             this.cities = new List<City>(cities);
             this.delay = delay;
         }
-        public abstract int TSP(ObservableCollection<City> VisitedCities, ObservableCollection<Edge> CurrentEdges, ObservableCollection<Edge> CurrentBestEdge, ObservableCollection<Edge> CurrentFinalEdges, ObservableCollection<Edge> FinalEdges);
-      
+        public string CreatePath(ICollection<Edge> edges)
+        {
+            string path = "";
+            path += "{ ";
+            foreach (Edge edge in edges)
+            {
+                path += edge.city1.Number + " =>";
+            }
+            path += edges.First().city1.Number + " } ";
+            return path;
+        }
     }
 }

@@ -10,7 +10,6 @@ namespace Salesman.Model
     public enum AlgorithmType { NearestNeighbour=0, Astar=1, SimulatedAnnealing=2}
     public class SalesmanM
     {
-        public Algorithm Algorithm { get; private set; }
         public List<City> Cities { get; private set; }
         public List<Edge> Edges { get; private set; }
        
@@ -25,14 +24,24 @@ namespace Salesman.Model
             Cities = new List<City>();
             Edges = new List<Edge>();
         }
-        public void ChoseAlgorithm(AlgorithmType algorithmType,int delay)
+        public Tuple<int,string> TSP(AlgorithmType algorithmType,int delay, ICollection<City> VisitedCities, ICollection<Edge> CurrentEdges, ICollection<Edge> CurrentBestEdge, ICollection<Edge> CurrentFinalEdges, ICollection<Edge> FinalEdges)
         {
             switch (algorithmType)
             {
-                case AlgorithmType.Astar: Algorithm = new Astar(NeighbourMatrix, Cities, delay); break;
-                case AlgorithmType.NearestNeighbour: Algorithm = new NearestNeighbour(NeighbourMatrix, Cities, delay);  break;
-                case AlgorithmType.SimulatedAnnealing: Algorithm = new Annealing(NeighbourMatrix, Cities, delay); break;
+                case AlgorithmType.Astar: 
+                    Astar astar = new Astar(NeighbourMatrix, Cities, delay);
+                   return  astar.TSP(VisitedCities, CurrentEdges, FinalEdges);
+                   
+                case AlgorithmType.NearestNeighbour: 
+                    NearestNeighbour nearest = new NearestNeighbour(NeighbourMatrix, Cities, delay);
+                    return nearest.TSP(VisitedCities, CurrentEdges, CurrentBestEdge, CurrentFinalEdges, FinalEdges);
+                    
+                case AlgorithmType.SimulatedAnnealing:
+                    Annealing annealing = new Annealing(NeighbourMatrix, Cities, delay);
+                   return annealing.TSP(VisitedCities, CurrentBestEdge, FinalEdges);
+                 
             }
+            return new Tuple<int, string>(0,"");
         }
         public City GetRandomCity(int number)
         {

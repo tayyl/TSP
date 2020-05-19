@@ -32,7 +32,7 @@ namespace Salesman.Model
         {
         }
 
-        public override int TSP(ObservableCollection<City> VisitedCities, ObservableCollection<Edge> CurrentEdges, ObservableCollection<Edge> CurrentBestEdge, ObservableCollection<Edge> CurrentFinalEdges, ObservableCollection<Edge> FinalEdges)
+        public Tuple<int,string> TSP(ICollection<City> VisitedCities, ICollection<Edge> CurrentEdges, ICollection<Edge> FinalEdges)
         {
             int bestDistance = 0;
             int citiesAmount = cities.Count;
@@ -84,7 +84,7 @@ namespace Salesman.Model
             System.Threading.Thread.Sleep(delay);
             currentBestDistancePath.RemoveAt(citiesAmount);
             bestDistance = pathDistance(currentBestDistancePath);
-            return bestDistance;
+            return new Tuple<int, string>(bestDistance, CreatePath(FinalEdges));
         }
         double heuristic(City city1, City city2)
         {

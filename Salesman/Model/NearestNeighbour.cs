@@ -31,7 +31,7 @@ namespace Salesman.Model
                 cities.Remove(startingCity);
                 App.Current.Dispatcher.BeginInvoke((Action)delegate
                 {
-                    VisitedCities.Add(new City(currentCity.X, currentCity.Y, currentCity.Number));
+                    VisitedCities.Add(currentCity);
                 });
                 int minWeight = int.MaxValue;
                 City tmp = currentCity;
@@ -69,7 +69,7 @@ namespace Salesman.Model
                     System.Threading.Thread.Sleep(delay);
                     App.Current.Dispatcher.BeginInvoke((Action)delegate
                     {
-                        VisitedCities.Add(new City(tmp.X, tmp.Y, tmp.Number));
+                        VisitedCities.Add(tmp);
                     });
                     currentCity = new City(tmp.X, tmp.Y, tmp.Number);
                     cities.Remove(tmp);

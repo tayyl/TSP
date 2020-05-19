@@ -46,18 +46,18 @@ namespace Salesman.Model
                             App.Current.Dispatcher.BeginInvoke((Action)delegate
                             {
                                 CurrentBestEdge.Clear();
-                                CurrentBestEdge.Add(new Edge(currentCity.X, currentCity.Y, city.X, city.Y, neighbourMatrix[currentCity.Number, city.Number]));
+                                CurrentBestEdge.Add(new Edge(currentCity, city, neighbourMatrix[currentCity.Number, city.Number]));
                             });
                         }
                         App.Current.Dispatcher.BeginInvoke((Action)delegate
                         {
-                            CurrentEdges.Add(new Edge(currentCity.X, currentCity.Y, city.X, city.Y, neighbourMatrix[currentCity.Number, city.Number]));
+                            CurrentEdges.Add(new Edge(currentCity, city, neighbourMatrix[currentCity.Number, city.Number]));
                         });
                         System.Threading.Thread.Sleep(delay);
                     }
                     App.Current.Dispatcher.BeginInvoke((Action)delegate
                     {
-                        CurrentFinalEdges.Add(new Edge(currentCity.X, currentCity.Y, tmp.X, tmp.Y, neighbourMatrix[currentCity.Number, tmp.Number]));
+                        CurrentFinalEdges.Add(new Edge(currentCity, tmp, neighbourMatrix[currentCity.Number, tmp.Number]));
                     });
                     currentBestDistance += neighbourMatrix[currentCity.Number, tmp.Number];
 
@@ -80,7 +80,7 @@ namespace Salesman.Model
                 App.Current.Dispatcher.BeginInvoke((Action)delegate
                 {
                     CurrentBestEdge.Clear();
-                    CurrentFinalEdges.Add(new Edge(VisitedCities.Last().X, VisitedCities.Last().Y, VisitedCities.First().X, VisitedCities.First().Y, neighbourMatrix[VisitedCities.Last().Number, VisitedCities.First().Number]));
+                    CurrentFinalEdges.Add(new Edge(VisitedCities.Last(), VisitedCities.First(), neighbourMatrix[VisitedCities.Last().Number, VisitedCities.First().Number]));
 
                     currentBestDistance += neighbourMatrix[VisitedCities.Last().Number, VisitedCities.First().Number];
                 });

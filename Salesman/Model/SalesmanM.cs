@@ -59,7 +59,7 @@ namespace Salesman.Model
                             NeighbourMatrix[i, j] = value;
                             NeighbourMatrix[j, i] = value;
                             if(NeighbourMatrix[i,j]>0)
-                              Edges.Add(new Edge(Cities[i].X, Cities[i].Y, Cities[j].X, Cities[j].Y, NeighbourMatrix[i, j]));
+                              Edges.Add(new Edge(Cities[i], Cities[j], NeighbourMatrix[i, j]));
                         }
                     }
                 }

@@ -8,32 +8,28 @@ namespace Salesman.Model
 {
     public class Edge
     {
+        public City city1 { get; private set; }
+        public City city2 { get; private set; }
 
-        public int X1 { get; private set; }
-        public int Y1 { get; private set; }
-        public int X2 { get; private set; }
-        public int Y2 { get; private set; }
         public float CenterX
         {
             get
             {
-                return (X1 + X2) / 2-7;
+                return (city1.X + city2.X) / 2-7;
             }
         }
         public float CenterY
         {
             get
             {
-                return (Y1 + Y2) / 2-9;
+                return (city1.Y + city2.Y) / 2-9;
             }
         }
         public int Weight { get; private set; }
-        public Edge(int x1, int y1,int x2, int y2, int weight)
+        public Edge(City city1, City city2, int weight)
         {
-            X1 = x1;
-            Y1 = y1;
-            X2 = x2;
-            Y2 = y2;
+            this.city1 = new City(city1.X, city1.Y, city1.Number);
+            this.city2 = new City(city2.X, city2.Y, city2.Number);
             Weight = weight;
         }
     }

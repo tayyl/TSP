@@ -99,7 +99,7 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Line X1="{Binding X1}" X2="{Binding X2}" Y1="{Binding Y1}" Y2="{Binding Y2}" StrokeThickness="1" Stroke="Coral">
+                        <Line X1="{Binding city1.X}" X2="{Binding city2.X}" Y1="{Binding city1.Y}" Y2="{Binding city2.Y}" StrokeThickness="1" Stroke="Coral">
 
                         </Line>
                     </DataTemplate>
@@ -114,7 +114,7 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Line X1="{Binding X1}" X2="{Binding X2}" Y1="{Binding Y1}" Y2="{Binding Y2}" StrokeThickness="1" Stroke="Red">
+                        <Line X1="{Binding city1.X}" X2="{Binding city2.X}" Y1="{Binding city1.Y}" Y2="{Binding city2.Y}" StrokeThickness="1" Stroke="Red">
 
                         </Line>
                     </DataTemplate>
@@ -129,7 +129,7 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Line X1="{Binding X1}" X2="{Binding X2}" Y1="{Binding Y1}" Y2="{Binding Y2}" StrokeThickness="1" Stroke="Blue">
+                        <Line X1="{Binding city1.X}" X2="{Binding city2.X}" Y1="{Binding city1.Y}" Y2="{Binding city2.Y}" StrokeThickness="1" Stroke="Blue">
 
                         </Line>
                     </DataTemplate>
@@ -144,7 +144,7 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Line X1="{Binding X1}" X2="{Binding X2}" Y1="{Binding Y1}" Y2="{Binding Y2}" StrokeThickness="1" Stroke="#FF46194D">
+                        <Line X1="{Binding city1.X}" X2="{Binding city2.X}" Y1="{Binding city1.Y}" Y2="{Binding city2.Y}" StrokeThickness="1" Stroke="#FF46194D">
 
                         </Line>
                     </DataTemplate>
@@ -159,7 +159,7 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Line X1="{Binding X1}" X2="{Binding X2}" Y1="{Binding Y1}" Y2="{Binding Y2}" StrokeThickness="1" Stroke="Green">
+                        <Line X1="{Binding city1.X}" X2="{Binding city2.X}" Y1="{Binding city1.Y}" Y2="{Binding city2.Y}" StrokeThickness="1" Stroke="Green">
 
                         </Line>
                     </DataTemplate>

@@ -57,11 +57,11 @@ namespace Salesman.Model
                     System.Threading.Thread.Sleep(delay);
                     CurrentBestEdges.Clear();
                     for(int i=0; i<cities.Count-1;i++)
-                        CurrentBestEdges.Add(new Edge(cities[i].X,cities[i].Y,cities[i+1].X,cities[i+1].Y,neighbourMatrix[cities[i].Number,cities[i+1].Number]));
+                        CurrentBestEdges.Add(new Edge(cities[i],cities[i+1],neighbourMatrix[cities[i].Number,cities[i+1].Number]));
 
                     App.Current.Dispatcher.BeginInvoke((Action)delegate
                     {
-                        CurrentBestEdges.Add(new Edge(cities[0].X, cities[0].Y, cities[cities.Count - 1].X, cities[cities.Count - 1].Y, neighbourMatrix[cities[0].Number, cities[cities.Count - 1].Number]));
+                        CurrentBestEdges.Add(new Edge(cities[0],  cities[cities.Count - 1], neighbourMatrix[cities[0].Number, cities[cities.Count - 1].Number]));
                     });
                 }
             }
@@ -70,6 +70,8 @@ namespace Salesman.Model
                 foreach (Edge edge in CurrentBestEdges)
                     FinalEdges.Add(edge);
                 CurrentBestEdges.Clear();
+                foreach (City city in cities)
+                    VisitedCities.Add(city);
             });
         
             return distance;

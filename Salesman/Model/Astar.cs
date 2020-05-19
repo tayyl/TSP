@@ -32,25 +32,36 @@ namespace Salesman.Model
         {
         }
 
-        public override int TSP(ObservableCollection<City> OpenCities, ObservableCollection<Edge> CurrentEdges, ObservableCollection<Edge> CurrentBestEdge, ObservableCollection<Edge> CurrentFinalEdges, ObservableCollection<Edge> FinalEdges)
+        public override int TSP(ObservableCollection<City> VisitedCities, ObservableCollection<Edge> CurrentEdges, ObservableCollection<Edge> CurrentBestEdge, ObservableCollection<Edge> CurrentFinalEdges, ObservableCollection<Edge> FinalEdges)
         {
             int bestDistance = 0;
             int citiesAmount = cities.Count;
             City startingCity = cities.First();
             SortedList<double, List<City>> paths = new SortedList<double, List<City>>(new DuplicateKeyComparer<double>());
-            
+            List<City> currentBestDistancePath;
             paths.Add(0, new List<City>() { startingCity });
             do
             {
-                List<City> currentBestDistancePath = paths.First().Value;
+                currentBestDistancePath = paths.First().Value;
                 paths.RemoveAt(0);
 
                 for (int i=0; i<citiesAmount; i++)
                 {
                     if (!currentBestDistancePath.Contains(cities[i]))
                     {
-                        double F = pathDistance(currentBestDistancePath) + heuristic(startingCity, cities[i]);
-                        paths.Add(F, new List<City>(currentBestDistancePath) { cities[i]});
+                        if (neighbourMatrix[currentBestDistancePath.Last().Number, cities[i].Number] != 0)
+                        {
+                            double F = pathDistance(currentBestDistancePath) + heuristic(startingCity, cities[i]);
+                            paths.Add(F, new List<City>(currentBestDistancePath) { cities[i] });
+                            if (CurrentEdges.Count < citiesAmount * 30)
+                            {
+                                App.Current.Dispatcher.BeginInvoke((Action)delegate
+                                {
+                                    CurrentEdges.Add(new Edge(currentBestDistancePath.Last(), cities[i], neighbourMatrix[currentBestDistancePath.Last().Number, cities[i].Number]));
+                                });
+                                System.Threading.Thread.Sleep(delay);
+                            }
+                        }
                     }
                 }
                 if (paths.First().Value.Count == citiesAmount)
@@ -61,8 +72,18 @@ namespace Salesman.Model
                     paths.RemoveAt(0);
                 }
             } while (paths.First().Value.Count!=citiesAmount+1);
-            paths.First().Value.RemoveAt(citiesAmount);
-            bestDistance = pathDistance(paths.First().Value);
+            currentBestDistancePath = paths.First().Value;
+            App.Current.Dispatcher.BeginInvoke((Action)delegate {
+                for (int i = 0; i < currentBestDistancePath.Count - 1; i++)
+                {
+                    FinalEdges.Add(new Edge(currentBestDistancePath[i], currentBestDistancePath[i + 1], neighbourMatrix[currentBestDistancePath[i].Number, currentBestDistancePath[i + 1].Number]));
+                    VisitedCities.Add(currentBestDistancePath[i]);
+                }
+                
+            });
+            System.Threading.Thread.Sleep(delay);
+            currentBestDistancePath.RemoveAt(citiesAmount);
+            bestDistance = pathDistance(currentBestDistancePath);
             return bestDistance;
         }
         double heuristic(City city1, City city2)

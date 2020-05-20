@@ -91,11 +91,15 @@ namespace Salesman.Model
         void Permutation(List<City> currentCities, out List<City> nextCities)
         {
             nextCities = new List<City>(currentCities);
-            int i1 = (int)(rnd.Next(currentCities.Count));
-            int i2 = (int)(rnd.Next(currentCities.Count));
-            City aux = nextCities[i1];
+            int i1, i2;
+            do
+            {
+                i1 = (rnd.Next(currentCities.Count));
+                i2 = (rnd.Next(currentCities.Count));
+            } while (i1 == i2);
+            City tmp = nextCities[i1];
             nextCities[i1] = nextCities[i2];
-            nextCities[i2] = aux;
+            nextCities[i2] = tmp;
 
         }
     }

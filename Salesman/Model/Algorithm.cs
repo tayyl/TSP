@@ -27,9 +27,9 @@ namespace Salesman.Model
             path += "{ ";
             foreach (Edge edge in edges)
             {
-                path += edge.city1.Number + " =>";
+                path += edge.City1.Number + " =>";
             }
-            path += edges.First().city1.Number + " } ";
+            path += edges.First().City1.Number + " } ";
             return path;
         }
     }

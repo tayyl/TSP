@@ -38,6 +38,7 @@ namespace Salesman.Model
                     
                 case AlgorithmType.SimulatedAnnealing:
                     Annealing annealing = new Annealing(NeighbourMatrix, Cities, delay);
+                    annealing.GetRandomInstance(rnd);
                    return annealing.TSP(VisitedCities, CurrentBestEdge, FinalEdges);
                  
             }

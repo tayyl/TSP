@@ -77,12 +77,16 @@ namespace Salesman.Model
                     System.Threading.Thread.Sleep(delay);
 
                 } while (cities.Any());
+                currentBestDistance += neighbourMatrix[CurrentFinalEdges.Last().City2.Number,
+                 CurrentFinalEdges.First().City1.Number];
                 App.Current.Dispatcher.BeginInvoke((Action)delegate
                 {
                     CurrentBestEdge.Clear();
-                    CurrentFinalEdges.Add(new Edge(VisitedCities.Last(), VisitedCities.First(), neighbourMatrix[VisitedCities.Last().Number, VisitedCities.First().Number]));
+                    CurrentFinalEdges.Add(new Edge(CurrentFinalEdges.Last().City2, CurrentFinalEdges.First().City1,
+                            neighbourMatrix[CurrentFinalEdges.Last().City2.Number,
+                            CurrentFinalEdges.First().City1.Number]));
 
-                    currentBestDistance += neighbourMatrix[VisitedCities.Last().Number, VisitedCities.First().Number];
+
                 });
                 System.Threading.Thread.Sleep(delay*3);
                 if (currentBestDistance < bestDistance)

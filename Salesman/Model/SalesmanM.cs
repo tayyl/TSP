@@ -7,7 +7,7 @@ using System.Collections;
 
 namespace Salesman.Model
 {
-    public enum AlgorithmType { NearestNeighbour=0, Astar=1, SimulatedAnnealing=2}
+    public enum AlgorithmType { NearestNeighbour=0, Astar=1, SimulatedAnnealing=2, AntColony=3}
     public class SalesmanM
     {
         public List<City> Cities { get; private set; }
@@ -40,6 +40,11 @@ namespace Salesman.Model
                     Annealing annealing = new Annealing(NeighbourMatrix, Cities, delay);
                     annealing.GetRandomInstance(rnd);
                    return annealing.TSP(VisitedCities, CurrentBestEdge, FinalEdges);
+                case AlgorithmType.AntColony:
+                    AntColony antColony = new AntColony(NeighbourMatrix, Cities, delay);
+                    antColony.GetRandomInstance(rnd);
+                    return antColony.TSP(FinalEdges, CurrentFinalEdges);
+                    
                  
             }
             return new Tuple<int, string>(0,"");

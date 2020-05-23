@@ -114,6 +114,11 @@ namespace Salesman.ViewModel
                 {
                     Id=AlgorithmType.SimulatedAnnealing,
                     Name="Simulated Annealing"
+                },
+                new AlgorithmCB()
+                {
+                    Id=AlgorithmType.AntColony,
+                    Name="AntColony"
                 }
             };
             Cities = new ObservableCollection<City>();

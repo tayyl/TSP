@@ -175,12 +175,12 @@ namespace Salesman.Model
             for (int k = 0; k < ants.Count; k++)
             {
                 int start = random.Next(0, cities.Count);
-                int[] newTrail = BuildTrail(k, start, pheromones);
+                int[] newTrail = BuildPath(start, pheromones);
                 ants[k] = newTrail;
             }
         }
 
-        private int[] BuildTrail(int k, int start, double[,] pheromones)
+        private int[] BuildPath(int start, double[,] pheromones)
         {
             int[] trail = new int[cities.Count];
             bool[] visited = new bool[cities.Count];
@@ -189,17 +189,16 @@ namespace Salesman.Model
             for (int i = 0; i < cities.Count - 1; i++)
             {
                 int cityX = trail[i];
-                int next = NextCity(k, cityX, visited, pheromones);
+                int next = NextCity(cityX, visited, pheromones);
                 trail[i + 1] = next;
                 visited[next] = true;
             }
             return trail;
         }
 
-        private int NextCity(int k, int cityX, bool[] visited, double[,] pheromones)
+        private int NextCity(int cityX, bool[] visited, double[,] pheromones)
         {
-            // for ant k (with visited[]), at nodeX, what is next node in trail?
-            double[] probs = ChosePathProbabilities(k, cityX, visited, pheromones);
+            double[] probs = CalculatePathChosingProbabilities(cityX, visited, pheromones);
 
             double[] cumul = new double[probs.Length + 1];
             for (int i = 0; i < cumul.Length; i++)
@@ -223,15 +222,15 @@ namespace Salesman.Model
             throw new Exception("Failure to return valid city in NextCity");
         }
 
-        private double[] ChosePathProbabilities(int k, int cityX, bool[] visited, double[,] pheromones)
+        private double[] CalculatePathChosingProbabilities(int cityX, bool[] visited, double[,] pheromones)
         {
-            // for ant k, located at nodeX, with visited[], return the prob of moving to each city
+            // for ant located at nodeX, with visited[], return the prob of moving to each city
             double[] taueta = new double[cities.Count];
-            // inclues cityX and visited cities
+            // includes cityX and visited cities
             double sum = 0.0;
             // sum of all tauetas
             // i is the adjacent city
-            for (int i = 0; i <= taueta.Length - 1; i++)
+            for (int i = 0; i < taueta.Length; i++)
             {
                 if (i == cityX)
                 {
@@ -275,7 +274,7 @@ namespace Salesman.Model
                     for (int k = 0; k < ants.Count; k++)
                     {
                         double length = Distance(ants[k]);
-                        // length of ant k trail
+                        // length of ant k path
                         double decrease = (1.0 - rho) * pheromones[i,j];
                         double increase = 0.0;
                         if (EdgeInTrail(i, j, ants[k]) == true)

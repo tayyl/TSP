@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace Salesman.Model
 {
@@ -33,12 +34,6 @@ namespace Salesman.Model
             int bestDistance = Distance(bestPath);
             double[,] pheromones = InitPheromones(cities.Count);
             int time = 0,maxTime=1000;
-            App.Current.Dispatcher.BeginInvoke((Action)delegate
-            {
-                for (int i = 0; i < bestPath.Length - 1; i++)
-                    CurrentFinalEdges.Add(new Edge(cities[bestPath[i]], cities[bestPath[i + 1]], neighbourMatrix[bestPath[i], bestPath[i + 1]]));
-            });
-            System.Threading.Thread.Sleep(delay);
 
             while (time < maxTime)
             {
@@ -50,24 +45,30 @@ namespace Salesman.Model
                 {
                     bestDistance = currentBestDistance;
                     bestPath = currentBestPath;
+                }
                     App.Current.Dispatcher.BeginInvoke((Action)delegate
                     {
                         CurrentFinalEdges.Clear();
-                        for (int i = 0; i < bestPath.Length - 1; i++)
-                            CurrentFinalEdges.Add(new Edge(cities[bestPath[i]], cities[bestPath[i + 1]], neighbourMatrix[bestPath[i], bestPath[i + 1]]));
-                        CurrentFinalEdges.Add(new Edge(CurrentFinalEdges.Last().City2, CurrentFinalEdges.First().City1,
-                                neighbourMatrix[CurrentFinalEdges.Last().City2.Number,
-                                CurrentFinalEdges.First().City1.Number]));
+                        for (int i = 0; i < cities.Count; i++)
+                            for (int j = 0; j < cities.Count; j++)
+                            {
+                                if (j > i)
+                                {
+                                    if (neighbourMatrix[i, j] > 0)
+                                        CurrentFinalEdges.Add(new Edge(cities[i], cities[j], neighbourMatrix[i, j], Color.FromRgb((byte)(pheromones[i, j] * 50), 0, 0)));
+                                }
+                            }                     
                     });
                     System.Threading.Thread.Sleep(delay);
-                }
+                
                 time++;
             }
             App.Current.Dispatcher.BeginInvoke((Action)delegate
             {
-                foreach(Edge edge in CurrentFinalEdges)
-                    FinalEdges.Add(edge);
-                CurrentFinalEdges.Clear();
+                for(int i=0; i<bestPath.Count()-1; i++)
+                    FinalEdges.Add(new Edge(cities[bestPath[i]],cities[bestPath[i+1]],neighbourMatrix[bestPath[i],bestPath[i+1]]));
+                FinalEdges.Add(new Edge(cities[bestPath[0]], cities[bestPath[bestPath.Count()-1]], neighbourMatrix[bestPath[0], bestPath[bestPath.Count() - 1]]));
+                //  CurrentFinalEdges.Clear();
             });
 
             System.Threading.Thread.Sleep(delay);
@@ -165,7 +166,7 @@ namespace Salesman.Model
             {
                 for (int j = 0; j < pheromones.GetLength(1); j++)
                 {
-                    pheromones[i,j] = 0.01;
+                    pheromones[i,j] = 0.0001;
                 }
             }
             return pheromones;

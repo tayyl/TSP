@@ -73,6 +73,7 @@
     </ApplicationDefinition>
     <Compile Include="Model\Algorithm.cs" />
     <Compile Include="Model\Annealing.cs" />
+    <Compile Include="Model\AntColony.cs" />
     <Compile Include="Model\Astar.cs" />
     <Compile Include="Model\City.cs" />
     <Compile Include="Model\Edge.cs" />

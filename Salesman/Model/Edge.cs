@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace Salesman.Model
 {
@@ -10,6 +11,7 @@ namespace Salesman.Model
     {
         public City City1 { get; private set; }
         public City City2 { get; private set; }
+        public SolidColorBrush EdgeColor { get; private set; }
 
         public float CenterX
         {
@@ -31,6 +33,14 @@ namespace Salesman.Model
             this.City1 = new City(city1.X, city1.Y, city1.Number);
             this.City2 = new City(city2.X, city2.Y, city2.Number);
             Weight = weight;
+            EdgeColor = new SolidColorBrush(Colors.Blue);
+        }
+        public Edge(City city1, City city2, int weight, Color color)
+        {
+            this.City1 = new City(city1.X, city1.Y, city1.Number);
+            this.City2 = new City(city2.X, city2.Y, city2.Number);
+            Weight = weight;
+            EdgeColor = new SolidColorBrush(color);
         }
     }
 }

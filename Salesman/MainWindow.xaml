@@ -137,7 +137,7 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Line X1="{Binding City1.X}" X2="{Binding City2.X}" Y1="{Binding City1.Y}" Y2="{Binding City2.Y}" StrokeThickness="1" Stroke="#FF46194D">
+                        <Line X1="{Binding City1.X}" X2="{Binding City2.X}" Y1="{Binding City1.Y}" Y2="{Binding City2.Y}" StrokeThickness="1" Stroke="{Binding EdgeColor}">
 
                         </Line>
                     </DataTemplate>

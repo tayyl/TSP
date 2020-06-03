@@ -27,7 +27,7 @@ namespace Salesman.Model
             random = rnd;
         }
 
-        public Tuple<int, string> TSP(ICollection<Edge> FinalEdges, ICollection<Edge> CurrentFinalEdges, int antsAmount=4)
+        public Tuple<int, string> TSP(ICollection<Edge> FinalEdges, ICollection<Edge> CurrentFinalEdges, int antsAmount=10)
         {
             List<int[]> ants = InitAnts(antsAmount, cities.Count);
             int[] bestPath = BestPath(ants);
@@ -55,7 +55,7 @@ namespace Salesman.Model
                                 if (j > i)
                                 {
                                     if (neighbourMatrix[i, j] > 0)
-                                        CurrentFinalEdges.Add(new Edge(cities[i], cities[j], neighbourMatrix[i, j], Color.FromRgb((byte)(pheromones[i, j] * 50), 0, 0)));
+                                        CurrentFinalEdges.Add(new Edge(cities[i], cities[j], neighbourMatrix[i, j], Color.FromRgb(Math.Min((byte)(pheromones[i, j] * 50),(byte)255), 0, 0)));
                                 }
                             }                     
                     });
@@ -67,7 +67,7 @@ namespace Salesman.Model
             {
                 for(int i=0; i<bestPath.Count()-1; i++)
                     FinalEdges.Add(new Edge(cities[bestPath[i]],cities[bestPath[i+1]],neighbourMatrix[bestPath[i],bestPath[i+1]]));
-                FinalEdges.Add(new Edge(cities[bestPath[0]], cities[bestPath[bestPath.Count()-1]], neighbourMatrix[bestPath[0], bestPath[bestPath.Count() - 1]]));
+                FinalEdges.Add(new Edge(cities[bestPath[bestPath.Count() - 1]], cities[bestPath[0]], neighbourMatrix[bestPath[0], bestPath[bestPath.Count() - 1]]));
                 //  CurrentFinalEdges.Clear();
             });
 
@@ -83,12 +83,12 @@ namespace Salesman.Model
             for (int i = 0; i < antsAmount; i++)
             {
                 int start = random.Next(0, citiesAmount);
-                ants[i] = RandomTrail(start, citiesAmount);
+                ants[i] = RandomTrail(citiesAmount);
             }
             return ants;
         }
 
-        private int[] RandomTrail(int start, int citiesAmount)
+        private int[] RandomTrail(int citiesAmount)
         {
             int[] path = new int[citiesAmount];
 
@@ -105,20 +105,13 @@ namespace Salesman.Model
                 path[r] = path[i];
                 path[i] = tmp;
             }
-            /*
-            int idx = IndexOfTarget(path, start);
-            // put start at [0]
-            int temp = path[0];
-            path[0] = path[idx];
-            path[idx] = temp;
-            */
             return path;
         }
 
         private int IndexOfTarget(int[] trail, int target)
         {
             // helper for RandomTrail
-            for (int i = 0; i <= trail.Length - 1; i++)
+            for (int i = 0; i < trail.Length; i++)
             {
                 if (trail[i] == target)
                 {
@@ -135,6 +128,7 @@ namespace Salesman.Model
             {
                 result += neighbourMatrix[trail[i], trail[i + 1]];
             }
+            result += neighbourMatrix[trail[0], trail[trail.Count()-1]];
             return result;
         }
         
@@ -152,10 +146,7 @@ namespace Salesman.Model
                     idxBestLength = k;
                 }
             }
-            int numCities = ants[0].Length;
-            int[] bestTrail = new int[numCities];
-            ants[idxBestLength].CopyTo(bestTrail, 0);
-            return bestTrail;
+            return ants[idxBestLength];
         }
 
         private double[,] InitPheromones(int citiesAmount)
@@ -189,17 +180,17 @@ namespace Salesman.Model
             visited[start] = true;
             for (int i = 0; i < cities.Count - 1; i++)
             {
-                int cityX = trail[i];
-                int next = NextCity(cityX, visited, pheromones);
+                int currCity = trail[i];
+                int next = NextCity(currCity, visited, pheromones);
                 trail[i + 1] = next;
                 visited[next] = true;
             }
             return trail;
         }
 
-        private int NextCity(int cityX, bool[] visited, double[,] pheromones)
+        private int NextCity(int currCity, bool[] visited, double[,] pheromones)
         {
-            double[] probs = CalculatePathChosingProbabilities(cityX, visited, pheromones);
+            double[] probs = CalculatePathChosingProbabilities(currCity, visited, pheromones);
 
             double[] cumul = new double[probs.Length + 1];
             for (int i = 0; i < cumul.Length; i++)
@@ -223,7 +214,7 @@ namespace Salesman.Model
             throw new Exception("Failure to return valid city in NextCity");
         }
 
-        private double[] CalculatePathChosingProbabilities(int cityX, bool[] visited, double[,] pheromones)
+        private double[] CalculatePathChosingProbabilities(int currCity, bool[] visited, double[,] pheromones)
         {
             // for ant located at nodeX, with visited[], return the prob of moving to each city
             double[] taueta = new double[cities.Count];
@@ -233,7 +224,7 @@ namespace Salesman.Model
             // i is the adjacent city
             for (int i = 0; i < taueta.Length; i++)
             {
-                if (i == cityX)
+                if (i == currCity)
                 {
                     taueta[i] = 0.0;
                     // prob of moving to self is 0
@@ -245,7 +236,7 @@ namespace Salesman.Model
                 }
                 else
                 {
-                    taueta[i] = Math.Pow(pheromones[cityX,i], alpha) * Math.Pow((1.0 /neighbourMatrix[cityX, i]), beta);
+                    taueta[i] = Math.Pow(pheromones[currCity,i], alpha) * Math.Pow((1.0 /neighbourMatrix[currCity, i]), beta);
                    
                     if (taueta[i] < 0.0001)
                     {
@@ -259,12 +250,11 @@ namespace Salesman.Model
                 sum += taueta[i];
             }
 
-            double[] probs = new double[cities.Count];
-            for (int i = 0; i <= probs.Length - 1; i++)
+            for (int i = 0; i < taueta.Length ; i++)
             {
-                probs[i] = taueta[i] / sum;
+                taueta[i] /=  sum;
             }
-            return probs;
+            return taueta;
         }
         private void UpdatePheromones(double[,] pheromones, List<int[]> ants)
         {
@@ -282,18 +272,7 @@ namespace Salesman.Model
                         {
                             increase = (Q / length);
                         }
-
                         pheromones[i,j] = decrease + increase;
-
-                        if (pheromones[i,j] < 0.0001)
-                        {
-                            pheromones[i,j] = 0.0001;
-                        }
-                        else if (pheromones[i,j] > 100000.0)
-                        {
-                            pheromones[i,j] = 100000.0;
-                        }
-
                         pheromones[j,i] = pheromones[i,j];
                     }
                 }
